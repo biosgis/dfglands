@@ -10,11 +10,21 @@ License: OpenGov3 (http://www.nationalarchives.gov.uk/doc/open-government-licenc
         <style>
             html,
             body,
-            #viewDiv {
+            #mapview {
                 padding: 0;
                 margin: 0;
                 height: 100%;
                 width: 100%;
+            }
+            main {
+                position: fixed; left: 0; top: 50px; right: 0; bottom: 0;
+                height: auto; width: 100%;
+            }
+            nav {
+                position: fixed; left: 0; top: 0; right: 0;
+                height: 50px; width: 100%;
+                background-color: white;
+                border-bottom: 1px solid silver;
             }
         </style>
 
@@ -25,18 +35,24 @@ License: OpenGov3 (http://www.nationalarchives.gov.uk/doc/open-government-licenc
             require([
                 "esri/Map",
                 "esri/views/MapView",
+                "esri/layers/ImageryLayer",
                 "dojo/domReady!"
-            ], function (Map, MapView) {
-
+            ], function (Map, MapView, ImageryLayer) {
+                console.log('DO AMD REQUIRED LOADER');
+                var NLCDLandCover2001_layer = new ImageryLayer({
+                    url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/NLCDLandCover2001/ImageServer",
+                    format: "jpgpng" // server exports in either jpg or png format
+                });
                 var map = new Map({
-                    basemap: "streets"
+                    basemap: "topo",
+                    layers: [NLCDLandCover2001_layer]
                 });
 
                 var view = new MapView({
-                    container: "viewDiv",
+                    container: "mapview",
                     map: map,
-                    zoom: 4,
-                    center: [15, 65] // longitude, latitude
+                    zoom: 8,
+                    center: [-121.33, 38.45] // longitude, latitude
                 });
 
             });
@@ -44,6 +60,18 @@ License: OpenGov3 (http://www.nationalarchives.gov.uk/doc/open-government-licenc
     </head>
 
     <body>
-        <div id="viewDiv"></div>
+        <header></header>
+        <nav>
+            <span>
+                <a>
+                    <img>
+                </a>
+            </span>
+        </nav>
+        <main>
+            <div id="mapview"></div>
+        </main>
+        <aside></aside>
+        <footer></footer>
     </body>
 </html>
